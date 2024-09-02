@@ -1,9 +1,9 @@
 ﻿string[][] default_contacts = new string[][]
 {
-    new string[3] { "Nicat", "Qurbanov", "0554585858" },
-    new string[3] { "Eltun", "Memmedli", "0704255540" },
-    new string[3] { "Cavid", "Memmedli", "0772771460" },
-    new string[3] { "Aysel", "Ehmedov", "0558563625" }
+    new string[3] { "Nicat", "Qurbanov", "+994554585858" },
+    new string[3] { "Eltun", "Memmedli", "+994704255540" },
+    new string[3] { "Cavid", "Memmedli", "+994772771460" },
+    new string[3] { "Aysel", "Ehmedov", "+994558563625" }
 };
 Start:
 Console.WriteLine("Which option will you chosse? \n\n" +
@@ -85,9 +85,45 @@ if (Secim == 2)
             Console.Write("Phone number: ");
             contacts[k][2] = Console.ReadLine();
 
-            if (contacts[k][2].All(char.IsDigit))
+            string plus = "+";
+
+            bool isDigits = contacts[k][2].Substring(1).All(char.IsDigit);
+
+            bool startsWithPlus = contacts[k][2].StartsWith(plus);
+
+
+
+
+            if (isDigits && startsWithPlus)
             {
-                validNumber = true;
+                if (contacts[k][2].Substring(1, 3) == "994")
+                {
+                    if (contacts[k][2].Substring(4, 2) == "50" || contacts[k][2].Substring(4, 2) == "51" ||
+                        contacts[k][2].Substring(4, 2) == "55" || contacts[k][2].Substring(4, 2) == "70" ||
+                        contacts[k][2].Substring(4, 2) == "77")
+                    {
+                        if (contacts[k][2].Length == 13)
+                        {
+                            validNumber = true;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Invalid Phone Number! Please Try Again!");
+                        }
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Invalid Phone Number! Please Try Again!");
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid Phone Number! Please Try Again!");
+                }
+
             }
             else
             {
@@ -95,7 +131,9 @@ if (Secim == 2)
                 Console.WriteLine("Invalid Phone Number! Please Try Again!");
             }
         }
+
         Console.Clear();
+
     }
 
     Array.Resize(ref default_contacts, contacts.Length + default_contacts.Length);
@@ -196,64 +234,97 @@ Baslangic:
 if (Secim == 4)
 {
 Edit:
-    Console.WriteLine("Which property will you edit in contacts?");
-    string Choose = Console.ReadLine().ToLower();
+    Console.WriteLine("Which contact will you edit?"); // Kontakt seçimi
+    string choosenContact = Console.ReadLine();
+    bool contactFound = false; // Kontaktın tapılıb-tapılmadığını yoxlamaq üçün
+    int choosenIndex = -1; // Seçilmiş kontaktın indeksini saxlamaq üçün
 
-    Console.WriteLine("Which contact will you edit? ");
-    string new_contact = Console.ReadLine().ToLower();
-
-    // Burada for each ile sen contacts adlarini daxil edilen contacts ile yoxlanmalisan 
-    // eger daxil etdiyi ad movcud deilse hec asagidaki hisseye dusmemelidir!
-
-    Console.WriteLine("Write new property");
-    string new_property = Console.ReadLine();
-
-
-    bool contactFound = false;
+    string[] Choosen_Range = new string[3]; // Seçilmiş kontaktın məlumatlarını saxlayacaq massiv
 
     for (int i = 0; i < default_contacts.Length; i++)
     {
-        if (Choose == "name")
+        if (choosenContact == default_contacts[i][0])
         {
-            if (default_contacts[i][0].ToLower() == new_contact.ToLower())
-            {
-                default_contacts[i][0] = new_property;
-                contactFound = true;
-                Console.WriteLine("Name updated successfully.");
-                break;
-            }
-            else { Console.WriteLine("Name Cannot Find!!"); }
-        }
-        else if (Choose == "Surname" && default_contacts[i][1].ToLower() == new_contact.ToLower())
-        {
-            default_contacts[i][1] = new_property;
-            contactFound = true;
-            Console.WriteLine("Surname updated successfully.");
-            break;
-        }
-        else if (Choose == "phone number" && default_contacts[i][2] == new_contact)
-        {
-            default_contacts[i][2] = new_property;
-            contactFound = true;
-            Console.WriteLine("Phone number updated successfully.");
+            // "Choosen_Range" massivinə seçilmiş kontaktın məlumatlarını kopyalayırıq
+            Choosen_Range[0] = default_contacts[i][0]; // Ad
+            Choosen_Range[1] = default_contacts[i][1]; // Soyad
+            Choosen_Range[2] = default_contacts[i][2]; // Telefon nömrəsi və ya digər məlumat
+
+            contactFound = true; // Əgər kontakt tapılıbsa, dövrü dayandır
+            choosenIndex = i; // İndeksi saxlamaq
             break;
         }
     }
+
     if (!contactFound)
     {
-        Console.WriteLine("Contact not found or invalid property. Please try again!");
-    }
+        Console.WriteLine("Contact not found. Try again!");
 
-    Console.WriteLine("Press 'f' to return to the start or any other key to exit...");
-    string Kec = Console.ReadLine();
-    if (Kec.ToLower() == "f")
-    {
+        Thread.Sleep(3000);
         Console.Clear();
-        goto Start;
+        goto Edit; // Əgər kontakt tapılmayıbsa, yenidən cəhd etmək üçün
     }
+    else
+    {
+        Console.WriteLine("Which property will you edit?"); // Kontaktın hansı xüsusiyyəti redaktə ediləcək
+        string choosenProperty = Console.ReadLine();
 
+    Choose:
+        bool Changcontact = false;
 
+        if (choosenProperty.ToLower() == "Name".ToLower())
+        {
+            Console.WriteLine("Write new Name:");
+            string new_contact = Console.ReadLine();
+            Choosen_Range[0] = new_contact;
+            Changcontact = true;
+        }
+        else if (choosenProperty.ToLower() == "Surname".ToLower())
+        {
+            Console.WriteLine("Write new Surname:");
+            string new_contact = Console.ReadLine();
+            Choosen_Range[1] = new_contact;
+            Changcontact = true;
+        }
+        else if (choosenProperty.ToLower() == "Phone number".ToLower())
+        {
+            Console.WriteLine("Write new Phone number:");
+            string new_contact = Console.ReadLine();
+            Choosen_Range[2] = new_contact;
+            Changcontact = true;
+        }
+        else
+        {
+            Console.WriteLine("Invalid property. Try again!");
+            Thread.Sleep(2000);
+            goto Choose; // Əgər xüsusiyyət düzgün deyilse, yenidən cəhd etmək üçün
+        }
+
+        if (Changcontact)
+        {
+            Console.WriteLine("Contact has successfully changed!");
+
+            // Yenilənmiş məlumatları default_contacts massivində müvafiq indeksdə yeniləyirik
+            default_contacts[choosenIndex][0] = Choosen_Range[0];
+            default_contacts[choosenIndex][1] = Choosen_Range[1];
+            default_contacts[choosenIndex][2] = Choosen_Range[2];
+
+            Console.WriteLine("Press 'f' to return to the start or any other key to exit...");
+            string returnToStart = Console.ReadLine();
+
+            if (returnToStart.ToLower() == "f")
+            {
+                Console.Clear();
+                goto Start; // Başlanğıca qayıtmaq üçün
+            }
+        }
+    }
 }
+
+
+
+
+
 
 #endregion
 
