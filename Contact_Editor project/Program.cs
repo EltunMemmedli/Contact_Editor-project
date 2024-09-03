@@ -21,21 +21,25 @@ Console.Clear();
 
 
 // Default Kontaktların göstərilməsi
-for (int i = 0; i < default_contacts.Length; i++)
+if(Secim == 1)
 {
-    if (Secim == 1)
+    for (int i = 0; i < default_contacts.Length; i++)
     {
+
         Console.WriteLine($"ID: {i + 1},\n" +
                      $" Name: {default_contacts[i][0]},\n" +
                      $" Surname: {default_contacts[i][1]},\n" +
                      $" Phone number: {default_contacts[i][2]}\n\n");
 
-    }
-}
-Console.WriteLine("==================================");
 
-if (Secim == 1)
-{
+
+
+    }
+    Console.WriteLine("==================================");
+
+
+
+
     Thread.Sleep(2000);
     Console.WriteLine("Press 'f' to return to the start or any other key to exit...");
 
@@ -46,7 +50,7 @@ if (Secim == 1)
         Console.Clear();
         goto Start;
     }
-};
+}
 
 #endregion
 
