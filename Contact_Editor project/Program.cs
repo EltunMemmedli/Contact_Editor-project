@@ -231,7 +231,10 @@ if (Secim.All(char.IsDigit))
 
             if (!found)
             {
+                Console.Clear();
                 Console.WriteLine("No results found.");
+                Thread.Sleep(2000);
+                goto Baslangic;
             }
             Kec:
             Thread.Sleep(2000);
