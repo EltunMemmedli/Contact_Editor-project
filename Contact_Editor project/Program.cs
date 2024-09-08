@@ -1,4 +1,6 @@
-﻿string[][] default_contacts = new string[][]
+﻿using System.Xml.Linq;
+
+string[][] default_contacts = new string[][]
 {
     new string[3] { "Nicat", "Qurbanov", "+994554585858" },
     new string[3] { "Eltun", "Memmedli", "+994704255540" },
@@ -73,7 +75,7 @@ if (Secim.All(char.IsDigit))
         int count;
 
       
-        if (!int.TryParse(input, out count))
+        if (!(int.TryParse(input, out count) && count > 0 ))
         {
             Console.Clear();
             Console.WriteLine("Invalid type! Please try again!");
@@ -93,22 +95,51 @@ if (Secim.All(char.IsDigit))
 
         for (int k = 0; k < count; k++)
         {
+            Name:
             Console.Write("Name: ");
             contacts[k][0] = Console.ReadLine();
 
-            contacts[k][0] = char.ToUpper(contacts[k][0][0]) + contacts[k][0].Substring(1).ToLower();
+            if (string.IsNullOrEmpty(contacts[k][0]))
+            {
+                Console.Clear();
+                Console.WriteLine("Write the name!");
+                goto Name;
+            }
+            else
+            {
+                contacts[k][0] = char.ToUpper(contacts[k][0][0]) + contacts[k][0].Substring(1).ToLower();
+            }
 
+            Surname:
             Console.Write("Surname: ");
             contacts[k][1] = Console.ReadLine();
 
-            contacts[k][1] = char.ToUpper(contacts[k][1][0]) + contacts[k][1].Substring(1).ToLower();
+            if (string.IsNullOrEmpty(contacts[k][1]))
+            {
+                Console.Clear();
+                Console.WriteLine("Write the surname!");
+                goto Surname;
+            }
+            else
+            {
+                contacts[k][1] = char.ToUpper(contacts[k][1][0]) + contacts[k][1].Substring(1).ToLower();
+            }
+            
 
             bool validNumber = false;
 
             while (!validNumber)
             {
+                Phone:
                 Console.Write("Phone number: ");
                 contacts[k][2] = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(contacts[k][2]))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Write the Phone number!");
+                    goto Phone;
+                }
 
                 string plus = "+";
                 bool isDigits = contacts[k][2].Substring(1).All(char.IsDigit);
@@ -301,31 +332,59 @@ if (Secim.All(char.IsDigit))
         {
         Choose:
             Console.WriteLine("Which property will you edit?"); 
-            string choosenProperty = Console.ReadLine();
+            string choosenProperty = Console.ReadLine().ToLower();
 
-     
+            if (string.IsNullOrEmpty(choosenProperty))
+            {
+                Console.Clear();
+                Console.WriteLine("Write the property!");
+                goto Choose;
+            }
             bool Changcontact = false;
 
-            if (choosenProperty.ToLower() == "Name".ToLower())
+            if (choosenProperty == "Name".ToLower())
             {
+                NewName:
                 Console.WriteLine("Write new Name:");
 
                 Choosen_Range[0] = Console.ReadLine();
+                if (string.IsNullOrEmpty(Choosen_Range[0]))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Write the property!");
+                    goto NewName;
+                }
+                else
+                {
+                    Choosen_Range[0] = char.ToUpper(Choosen_Range[0][0]) + Choosen_Range[0].Substring(1).ToLower();
 
-                Choosen_Range[0] = char.ToUpper(Choosen_Range[0][0]) + Choosen_Range[0].Substring(1).ToLower();
-       
 
-                Changcontact = true;
+                    Changcontact = true;
+                }
+
+               
             }
             else if (choosenProperty.ToLower() == "Surname".ToLower())
             {
+                NewSurname:
                 Console.WriteLine("Write new Surname:");
                 Choosen_Range[1] = Console.ReadLine();
 
-                Choosen_Range[1] = char.ToUpper(Choosen_Range[1][0]) + Choosen_Range[1].Substring(1).ToLower();
+                if (string.IsNullOrEmpty(Choosen_Range[1]))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Write the property!");
+                    goto NewSurname;
+                }
+                else
+                {
+                    Choosen_Range[1] = char.ToUpper(Choosen_Range[1][0]) + Choosen_Range[1].Substring(1).ToLower();
 
 
-                Changcontact = true;
+                    Changcontact = true;
+                }
+
+
             }
             else if (choosenProperty.ToLower() == "Phone number".ToLower())
             {
@@ -333,9 +392,16 @@ if (Secim.All(char.IsDigit))
 
                 while (!validNumber)
                 {
+                    NewNumber:
                     Console.Write("Write phone number: ");
 
                     Choosen_Range[2] = Console.ReadLine();
+                    if (string.IsNullOrEmpty(Choosen_Range[2]))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Write the property!");
+                        goto NewNumber;
+                    }
 
                     string plus = "+";
                     bool isDigits = Choosen_Range[2].Substring(1).All(char.IsDigit);
